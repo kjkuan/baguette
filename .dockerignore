@@ -1,0 +1,5 @@
+.git
+*.xtrace
+*.strace
+*.log
+*.todos

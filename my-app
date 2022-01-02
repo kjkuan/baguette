@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+#
+# TODO:
+#  - need a dialog widget
+#  - need a way to progressively send back backend outputs (e.g., logs)
+#  - need an example that show case all widgets
+#  - need different examples that:
+#    - show reactive widegts with dependencies between them.
+#    - show a installation wizard
+#    
+
+set -eo pipefail
+
+source baguette.sh
+
+declare -i click_count
+declare user_name=
+
+@main () {
+    main/ id=main data-scope
+    markdown '### Baguette Demo'
+
+    button name=mybutton
+    if [[ ${val_mybutton:-} == clicked ]]; then
+        click_count+=1
+    fi
+
+    p/ ="The button has been clicked <${click_count:-0}> times"
+
+    datalist/ id=names
+      option/ value=Jack; /option
+      option/ value=Peter; /option
+      option/ value=Andy; /option
+    /datalist
+
+    textfield name=myfield label="Name (4 to 8 characters):" \
+              minlength=4 maxlength=8 size=10 required list=names \
+              value="$user_name"
+
+    user_name=${val_myfield:-}
+
+    if [[ $user_name ]]; then
+        p/ ="Your name is: ${user_name}"
+    fi
+
+    textfield name=field2 label="Data:" multiline rows=7 cols=30
+    pre/ ="$val_field2"
+
+    checkbox name=chk1 label="Destroy all? "
+    if [[ ${val_chk1:-} ]]; then
+        checkbox name=chk2 label="Are you sure?"
+    fi
+
+    radio name=myradio -- \
+        label=Email value=email \
+        label=Phone value=phone checked \
+        label=Something value=thing
+
+    button label="Hello"
+    button label="World"
+
+    selectbox name=fruit label="Some fruits" \
+      -- \
+        option=Banana \
+        option=Strawberry value=S \
+         \
+      --group "Group 1" \
+        option="Honey Crisp" value=A \
+        option=Orange \
+         \
+      --group "Group 2" \
+        option=Grape \
+        option=Pear \
+      -- \
+        option=Pineapple value=PPP
+
+    p/ ="You picked: ${val_fruit[*]}"
+
+    @handle-file-upload
+
+    textfield name=input_range label=Range type=range min=0 max=59 value=0
+
+    textfield name=input_number label=Seconds type=number min=0 max=59 value=0
+
+    textfield name=input_datetime label=DateTime type=datetime-local value="$(date +%Y-%m-%dT%T)"
+
+    /main
+
+}
+
+upload_file=
+@handle-file-upload () {
+    if [[ ! -e $upload_file ]]; then
+        upload_file=$(mktemp) || err-return
+        trap 'rm -f "$upload_file"' EXIT
+    fi
+    if [[ $val_myfile_filename ]]; then
+        base64 -d <<<"$val_myfile" > "$upload_file" || err-return
+    fi
+    file-upload id='myfile' label="Upload" data-scope=$FUNCNAME
+}
+
+
+
+baguette

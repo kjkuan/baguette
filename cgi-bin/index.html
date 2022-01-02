@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+CRLF=$'\r\n'
+print () { printf %s "$@"; }
+nl () { print "$CRLF"; }
+
+render-as-heredoc () {
+    local _content; _content=$(cat "$1") || return
+    eval "cat <<EOF_$$
+$_content
+EOF_$$
+"
+}
+
+print "Content-Type: text/html"; nl
+nl
+
+
+if [[ -e "${WSD_SCRIPT_DIR:?}/index.html" ]]; then
+    render-as-heredoc "$WSD_SCRIPT_DIR/index.html"
+else
+    render-as-heredoc "${BGT_HOME:?}/index.html"
+fi
+
+# vim: filetype=sh

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <link id="stylesheet" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.js" integrity="sha384-oeUn82QNXPuVkGCkcrInrS1twIxKhkZiFfr2TdiuObZ3n3yIeMiqcRzkIcguaof1" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
+
+    <script src="/baguette.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+
+    <link href="/app.css" rel="stylesheet" type="text/css">
+    <script src="/app.js"></script>
+  </head>
+  <body ws-connect="${WSD_ADDR}:${WSD_PORT}/">
+    <div id="bgt-flash-area"></div>
+
+    <nav id="todo-lists"></nav>
+    <main id="main" data-scope></main>
+  </body>
+</html>

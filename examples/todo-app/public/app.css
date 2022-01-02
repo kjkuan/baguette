@@ -1,0 +1,119 @@
+body {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+}
+#todo-lists {
+    float: left;
+    width: 300px;
+    height: 100vh;
+    margin: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: lightgrey;
+}
+#todo-lists ol {
+    list-style: inside;
+    padding-left: 1em;
+    border-bottom: 1px solid darkgrey;
+    cursor: pointer;
+}
+#todo-lists li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1em;
+}
+#todo-lists li::marker {
+    content: '≡ ';
+}
+
+a.TodoListManager-deleteLink {
+    cursor: pointer;
+    visibility: hidden;
+    float: right;
+}
+li:hover a.TodoListManager-deleteLink {
+    visibility: visible;
+}
+
+.TodoListManager-ops {
+    padding-left: 1em;
+    cursor: pointer;
+}
+
+main {
+    width: 800px;
+    float: left;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#todo-item-filters {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+    text-align: right;
+}
+#todo-item-filters a:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.TodoList .sortable-ghost {
+    opacity: 0;
+}
+.TodoList .sortable-drag {
+    opacity: 1;
+}
+#new-item-button {
+    margin-top: 1em;
+    margin-left: 2.5em;
+}
+#new-item-button .widget {
+    padding: 5px 10px 5px 10px;
+}
+
+.TodoItem {
+    list-style-type: none;
+    border-radius: 4px;
+    padding: 3px 8px 0px 8px;
+}
+.TodoItem:hover {
+    background-color: lightgrey;
+}
+
+.TodoItem-dragHandle {
+    cursor: move;
+    cursor: -webkit-grabbing;
+    visibility: hidden;
+    display: inline-block;
+    float: left;
+    margin-right: 5px;
+    letter-spacing: -0.7em;
+}
+.TodoItem:hover .TodoItem-dragHandle:not(.appending) {
+    visibility: visible;
+}
+
+.TodoItem-text {
+    display: inline-block;
+    width: 80%;
+    padding-left: 4px;
+}
+.TodoItem-text[contenteditable] {
+    outline: 0px solid transparent;
+}
+.TodoItem:has(input[type=checkbox]:checked) .TodoItem-text {
+    text-decoration: line-through
+}
+
+
+.TodoItem-controls {
+    text-align: right;
+    float: right;
+    visibility: hidden;
+}
+.TodoItem:hover .TodoItem-controls {
+    visibility: visible;
+    cursor: pointer;
+}

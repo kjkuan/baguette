@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html data-theme="light">
+  <head>
+    <title>Markdown Previewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link id="stylesheet" rel="stylesheet" href="/github-markdown.css">
+    <!-- NOTE: taken from https://raw.githubusercontent.com/sindresorhus/github-markdown-css/gh-pages/github-markdown.css -->
+
+    <link id="stylesheet" rel="stylesheet" href="/app.css">
+
+    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx-ext-ws@2.0.1/ws.js"></script>
+    <script src="/baguette.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.5.3/src-min-noconflict/ace.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.5.3/src-min-noconflict/theme-github.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.5.3/src-min-noconflict/mode-markdown.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/styles/default.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.11.1/build/highlight.min.js"></script>
+  </head>
+  <body ws-connect="${WSD_ADDR}:${WSD_PORT}/">
+    <div id="bgt-flash-area"></div>
+    <main id="main" data-scope></main>
+  </body>
+</html>
