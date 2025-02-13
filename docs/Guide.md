@@ -1,6 +1,6 @@
-0. Clone the repo and make sure you have the required dependencies installed and in `PATH`.
-1. Add the `baguette` repo directory to `PATH`.
-2. Save the following single file app as `myapp`:
+1. Clone the repo and make sure you have the required dependencies installed and in `PATH`.
+2. Add the `baguette` repo directory to `PATH`.
+3. Save the following single file app as `myapp`:
 ```bash
 #!/usr/bin/env bash
 #
@@ -28,10 +28,10 @@ source baguette.sh
 
 baguette
 ```
-3. Run it:
+4. Run it:
 ```bash
-ubuntu@b3905ccfd545:~/work/baguette$ chmod +x ./myapp
-ubuntu@b3905ccfd545:~/work/baguette$ ./myapp
+$ chmod +x ./myapp
+$ ./myapp
 websocketd --address 0.0.0.0 --port 8080 --staticdir /home/ubuntu/work/baguette/public --cgidir /home/ubuntu/work/baguette/cgi-bin --passenv PATH,BGT_HOME,WSD_ADDR,WSD_PORT,WSD_SCRIPT_DIR,WSD_PUBLIC_DIR /home/ubuntu/work/baguette/myapp
 
 You can access the Baguette app at http://127.0.0.1:8080/index.html
@@ -42,7 +42,7 @@ Wed, 12 Feb 2025 23:17:45 +0000 | INFO   | server     |  | Serving CGI scripts f
 Wed, 12 Feb 2025 23:17:45 +0000 | INFO   | server     |  | Starting WebSocket server   : ws://0.0.0.0:8080/
 Wed, 12 Feb 2025 23:17:45 +0000 | INFO   | server     |  | Serving CGI or static files : http://0.0.0.0:8080/
 ```
-4. Visit the URL to see the app. You can use the browser's inspector / dev tool to see the HTML your app returned.
+5. Visit the URL to see the app. You can use the browser's inspector / dev tool to see the HTML your app returned.
    You should also switch to the websocket section of the browser's dev tool and see what's sent and received over
    the websocket when you interact with the app.
 
@@ -106,24 +106,19 @@ called is `@A`.
 
 - Don't use the `hx-include` or `hx-vals` attributes on your elements since
   Baguette relies on both to work, unless you know what you are doing.
-
 - Don't output to `STDOUT` either directly or indirectly from your app.
   `STDOUT` is reserved for HTML responses from your app.
-
 - Don't output to `STDERR` either directly or indirectly unless it's really
   an error. By default, Baguette, shows any errors written to `STDERR` at the
   top of your app if `BGT_ENV` is not `prod`. This can be disabled by setting
   `BGT_FLASH_STDERR` to empty.
-
   - Use the HTML tag functions like `div/` (opening tag) and `/div` (closing tag)
     to generate the HTML response. Attributes can be set on a tag via the
     `name=value` arguments to the opening tag function. E.g., `input/ type=text name=age value=42`
-
 - Don't navigate away from the page. Doing so will disconnect the page from the app
   process, causing it to be terminated, and lose all the application states. For
   example, when generating an anchor element, it should either be marked with
   `ws-send`, or, it should have `target=_blank`.
-
 - A render function should output one or more complete HTML elements that have
   the `id` attributes. htmx will replace the elements in the page with the
   returned elements that have matching `id`'s. This is simply how htmx's websocket 
