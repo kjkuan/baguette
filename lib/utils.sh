@@ -216,7 +216,6 @@ err-trace () {  # [error-message [status]]
     [[ ! ${1:-} ]] || printf "Error: %s\n" "$1"
 
     local new_trace=$(while caller $((i++)); do :; done | tac)
-#    if [[ ${BGT_FROM_ERR_TRAP:-} || ${BGT_LAST_TRACE:-} != "$new_trace"* ]]; then
     if [[ ${BGT_LAST_TRACE:-} != "$new_trace"* ]]; then
         # NOTE: this checks avoids printing duplicated sub traces as Bash
         # unwinds the stack of calls.
@@ -225,14 +224,6 @@ err-trace () {  # [error-message [status]]
         echo
         echo "Stack trace of pid $BASHPID from $caller (most recent first):"
         echo -----------------------------------------------------------------------
-
-#        if [[ ${BGT_FROM_ERR_TRAP:-} && ${BGT_LAST_TRACE:-} ]]; then
-#            echo "$BGT_LAST_TRACE" | tac | _print_stacktrace
-#            echo -----------------------------------------------------------------------
-#            [[ $opts == *x* ]] && set -x
-#            return $rc
-#        fi
-
         echo "$new_trace" | tac | _print_stacktrace
         echo -----------------------------------------------------------------------
 
