@@ -1,4 +1,4 @@
-# This requires the 'markdown' command from Discount, which is most
+# This requires the 'cmark' or 'cmark-gfm' command, which is most
 # likely available as a package for your Linux distro.
 #
 if type -P cmark-gfm >/dev/null 2>&1; then
