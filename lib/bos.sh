@@ -102,10 +102,8 @@ $1 () {
     [[ \${1:-} ]] || err-return
     new $1 "\$1";
     local -n self=\${!1} || err-return
-    $1/init "\${@:2}"
+    msg "\$self" init "\${@:2}"
 }
-
-$1/init () { msg "\$self" ../init "\$@"; }
 EOF
     )" || err-return
 }

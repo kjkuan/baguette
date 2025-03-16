@@ -39,6 +39,7 @@ htmx.onLoad(function (elt) {
     if (!body.getAttribute("ws-connect")){
         body.setAttribute("ws-connect", "127.0.0.1:8080/");
     }
+    body.setAttribute("hx-headers", "js:{'HX-Trigger-Event': event.type}");
     body.setAttribute("hx-include", "closest *[data-scope]");
     body.setAttribute("hx-vals", `js:{
         "render": get_default_renderer(event),

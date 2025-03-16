@@ -1,0 +1,66 @@
+.FE-Folder {
+    list-style-type: none;
+    width: 15vw;
+    padding-left: 0;
+    padding-top: 0;
+    user-select: none;
+    cursor: pointer;
+}
+
+.FE-Folder li {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 5px;
+    padding-top: 0;
+    padding-left: 13px;
+    padding-bottom: 0;
+}
+
+li.FE-FileFolder {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.FE-FileFolder li {
+    border-left: 1px solid lightgrey;
+}
+.FE-FileFolder li.FE-File {
+    padding-left: 34px;
+}
+
+li.FE-FileFolder-closed:before {
+    content: '⌵';
+    display: inline-block;
+    transform: rotate(-90deg);
+    transform-origin: center 60%;
+    position: relative;
+    left: -2px;
+}
+li.FE-FileFolder-open:before {
+    content: '⌵';
+    position: relative;
+    left: -2px;
+}
+
+:not(li.FE-FileFolder > ul) > li.FE-File {
+    margin-left: 24px;
+}
+
+li.FE-File.sortable-drag, li.FE-FileFolder.sortable-drag {
+    color: black;
+    background: lightcyan;
+}
+ul.FE-Folder:has(> .sortable-ghost) {
+    background: lightblue;
+}
+
+li.FE-File.selected > .FE-Label, li.FE-FileFolder.selected > .FE-Label {
+    background-color: lightgrey;
+    border-radius: 15px;
+}
+.FE-Label {
+    padding: 5px 9px 5px 9px;
+//    outline: 1px dotted orange;
+}
+

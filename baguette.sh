@@ -56,11 +56,12 @@ BGT_EXIT_CMDS=(); trap '
 # Load helper functions and aliases
 source "$BGT_HOME/lib/utils.sh"
 
+# Load object system for modeling
+source "$BGT_HOME/lib/bos.sh"
+
 # Load the built-in widgets
 source "$BGT_HOME/lib/widgets/init.sh"
 
-# Load object system for modeling
-source "$BGT_HOME/lib/bos.sh"
 
 if [[ ${no_errexit:-} ]]; then set +e; unset -v no_errexit; fi
 
@@ -145,6 +146,8 @@ _baguette () {
         then
             "$handler"
             if [[ ${BGT_FLASH_STDERR:-} && -s $BGT_STACK_TRACE_FILE && ${BGT_ENV:-} != prod ]]; then
+                #FIXME: this logic should also be in the ERR trap?
+
                 compose _flash msg="Found error outputs!"; with () {
                     details/
                     summary/ ="STDERR"

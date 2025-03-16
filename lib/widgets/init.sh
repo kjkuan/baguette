@@ -12,6 +12,7 @@ _bgt-init-built-in-widgets () {
         selectbox.sh
         file-upload.sh
         flash.sh
+        file-explorer.sh
     )
     local widget
     for widget in "${widgets[@]}"; do
@@ -34,8 +35,11 @@ _bgt-init-built-in-widgets () {
     script/ () {
         local args=() contents
         while (( $# )); do
-            [[ $1 == =* ]] || args+=("$1")
-            contents+=${1#=}
+            if [[ $1 == =* ]]; then
+                contents+=${1#=}
+            else
+                args+=("$1")
+            fi
             shift
         done
         local js=()

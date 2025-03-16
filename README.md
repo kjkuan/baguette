@@ -9,7 +9,7 @@ it effectively; however, any feedback, ideas, or contributions are welcomed.
 Please take a look at the issues page if you'd like to participate in its development.
 
 > **NOTE:** While it's possible to build a public-facing "web app" with
-> Baguette, its main use case is for building reactive form-based UI to
+> Baguette, its main use case is for building reactive form-based UIs to
 > existing tools / commands that are meant for internal consumptions within a
 > secure private network.
 
