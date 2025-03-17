@@ -153,7 +153,7 @@ for working with objects. Let's take a look at an example:
 class Person
 ```
 
-Above registers 'Person' as a class in Bos and also generates a function
+Above registers `Person` as a class in Bos and also generates a function
 named after the class for creating object instances of the class. E.g., a
 person object can be created with:
 ```bash
@@ -162,7 +162,7 @@ declare p1
 Person p1 name="John Doe"
 ```
 
-This creates a `Person` object with a `name` attribute set to "John Doe", and assigns
+This creates a `Person` object with a `name` attribute set to *John Doe*, and assigns
 its `oid` to the variable, `p1`.
 
 When you instantiate an object using a class, Bos sends the `init` message to the
@@ -191,10 +191,11 @@ Person/init () {  # first_name=... last_name=... gender=<M|F> birth_date=<yyyy-m
     msg $self age || err-return
 }
 ```
-Within a method, the `self` variable is automatically available, and it expands
-to the `oid` of the object receiving the message. Here we use the `msg` function
-to send a message to the object itself. `$1` is the receiver, and the rest of the
-arguments will become the arguments to the method identified by the message.
+Within a method, the `self` variable is automatically available, and `$self` (or
+`${self[0]}`) expands to the `oid` of the object receiving the message.
+Here we use the `msg` function to send a message to the object itself.
+`$1` (`$self` in the example) is the receiver, and the rest of the arguments
+will become the arguments to the method identified by the message.
 
 When using the `msg` function, the `../` prefix to a message name causes the
 message resolution to start from the *parent* class of the object instead.
@@ -204,6 +205,17 @@ its named arguments (in the form of `name=value`) as the object's attributes. So
 here we are actually calling the `Object/init` method to assign attributes from
 the named arguments passed during the object's creation (i.e., when `Person` is
 called).
+
+Besides using `$self` to refer to the `oid`, `self` is also the associative
+array representing an object's state. Therefore, you can use it to get and set
+an object's attributes in a method, like:
+```bash
+
+self[myattr]=some-value
+echo "${self[myattr]}"
+```
+
+Here are some more example methods based on the `Person` class above:
 
 ```bash
 
@@ -247,3 +259,5 @@ Test-Person () {
 
 Test-Person
 ```
+See [Bos] for details on functions available for working with objects, as well as,
+the built-in `Object`'s instance methods.

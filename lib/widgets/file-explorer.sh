@@ -236,6 +236,8 @@ fe-navigate-to-path () {  # <path-id> <path> <from-path-id>
         msg $model set "$path_id@state=0"
         HX[Trigger]=$path_id   # fake the click trigger
         file-explorer
+    else
+        file-explorer "$model"
     fi
     script/ id=script-from-server ="$(cat <<EOF
         setTimeout(function() {
