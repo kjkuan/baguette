@@ -59,6 +59,7 @@ $ opts=(--rm --userns keep-id -v "$PWD:${d:?}" -e WSD_PORT=5000 -p 5000:5000)
 $ podman run "${opts[@]}" -w "$d/examples/todo-app" $image ./main.sh
 $ podman run "${opts[@]}" -w "$d/examples/markdown-app" $image ./main.sh
 $ podman run "${opts[@]}" -w "$d/examples/contact-app" $image ./main.sh
+$ podman run "${opts[@]}" -w "$d/examples/wiki-app" $image ./main.sh
 
 # NOTE: The path to /index.html is required for the URL of these apps.
 ```
