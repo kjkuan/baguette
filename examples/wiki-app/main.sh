@@ -22,7 +22,7 @@ set -eo pipefail
 source baguette.sh
 
 FE_LS_OPTS+=(--ignore=.*)
-FE_MODEL=  # to be created in @main
+FE_MODEL=  # to be created later
 
 WIKI_HOME=${WIKI_HOME:-$WSD_SCRIPT_DIR/wiki}
 
@@ -46,27 +46,26 @@ WikiFEModel/list () {
 }
 WikiFEModel/has-path-id () { [[ ${1:-} ]] && [[ ${self[$1]:-} ]]; }
 
+[[ -d $WIKI_HOME ]] || {
+    mkdir -p "$WIKI_HOME"; (
+        cd "$WIKI_HOME"
+
+        git init -b main
+        git config user.email "baguette+wiki@localhost"
+        git config user.name "Baguette Wiki-App"
+
+        cp "$WSD_SCRIPT_DIR/Index.md" .
+        echo ".gitkeep" > .gitignore
+        git add Index.md .gitignore
+        git commit -m "New WIKI_HOME created; added default Index.md."
+    )
+}
+WikiFEModel FE_MODEL root="$WIKI_HOME"
+
 git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
 
+
 @main () {
-    local new_wiki_home
-    [[ -d $WIKI_HOME ]] || {
-        mkdir -p "$WIKI_HOME"; (
-            cd "$WIKI_HOME"
-
-            git init -b main
-            git config user.email "baguette+wiki@localhost"
-            git config user.name "Baguette Wiki-App"
-
-            cp "$WSD_SCRIPT_DIR/Index.md" .
-            echo ".gitkeep" > .gitignore
-            git add Index.md .gitignore
-            git commit -m "New WIKI_HOME created; added default Index.md."
-        )
-        new_wiki_home=x
-    }
-    WikiFEModel FE_MODEL root="$WIKI_HOME"
-
     main/ id=main data-scope
         div/ id="file-explorer-panel"
 
@@ -86,10 +85,6 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
         /div
         div/ id=file-viewer; /div
     /main
-
-    if [[ ${new_wiki_home:-} ]]; then
-        flash msg="Created WIKI_HOME at: $WIKI_HOME"
-    fi
 }
 
 @handle-file-deletes () {
