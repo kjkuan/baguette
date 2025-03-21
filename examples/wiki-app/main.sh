@@ -114,7 +114,11 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
 }
 
 @handle-file-rename () {
-    msg $FE_MODEL id-path $val_path_id; local path=$RESULT
+    local model=${val_path_id%%-*}
+    msg $model id-path $val_path_id; local path=$RESULT
+
+    val_old_name+=.md
+    val_new_name+=.md
     [[ $val_old_name == "${path##*/}" ]] # sanity check
 
     if [[ $path == */* ]]; then
@@ -130,7 +134,7 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
 
         # Restore the old name
         li/ id="$val_path_id" hx-swap-oob="textContent: #$val_path_id .FE-Label"
-            text "$val_old_name"
+            text "${val_old_name%.md}"
         /li
         return 0
     }
@@ -146,14 +150,12 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
      fi
     )
 
-    # Remove old path-id and re-render from the parent directory
-    msg $FE_MODEL remove-id "$val_path_id"
-    if [[ $new_path == */* ]]; then
-        msg $FE_MODEL path-id ${new_path%/*}
-    else
-        RESULT=$FE_MODEL
-    fi
-    file-explorer "$RESULT"
+    # Remove the old path-id
+    msg $model remove-id "$val_path_id"
+
+    msg $FE_MODEL path-id "$new_path"; local new_path_id=$RESULT
+    fe-navigate-to-path $new_path_id
+    @file-viewer $new_path_id  # needed to keep the tree and the view in-sync
 }
 
 create-untitled () (  # <file|folder>
@@ -293,7 +295,7 @@ EOF
         if msg $model has-path-id "$val_back_btn_link"; then
             path_id=$val_back_btn_link
             msg $model id-path "$path_id"; path=$RESULT
-            fe-navigate-to-path "$path_id" "$path" "$val_path_id"
+            fe-navigate-to-path "$path_id" "$path"
         fi
         (( ${#LINK_STACK[*]} > 1 )) && unset -v "LINK_STACK[-1]"
 
@@ -330,7 +332,7 @@ EOF
             return
         fi
 
-        fe-navigate-to-path "$path_id" "$val_link" "$val_path_id"
+        fe-navigate-to-path "$path_id" "$val_link"
 
         #FIXME: If the current page has been changed, prompt and ask the user if he/she
         #       wants to save the current page.

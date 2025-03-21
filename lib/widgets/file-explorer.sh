@@ -223,7 +223,7 @@ EOF
 # Helper to unselect all and select the specified path-id, expanding
 # its parent directory if necessary.
 #
-fe-navigate-to-path () {  # <path-id> <path> <from-path-id>
+fe-navigate-to-path () {  # <path-id> <path>
     local model=${1%%-*}
     if [[ $1 != *d ]]; then
         local dir; dir=$(dirname "$2")
