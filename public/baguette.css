@@ -7,6 +7,7 @@
     cursor: pointer;
 }
 
+
 .FE-Folder li {
     margin-top: 0;
     margin-bottom: 0;
@@ -41,6 +42,19 @@ li.FE-FileFolder-open:before {
     content: '⌵';
     position: relative;
     left: -2px;
+}
+
+/** Overlay the inner UL on top of the closed LI that contains it so that
+ *  it's easy to drop files onto it.
+ */
+.FE-FileFolder-closed {
+    position: relative;
+}
+.FE-FileFolder-closed ul.FE-Folder {
+    position: absolute;
+    top: 7px;
+    left: 15px;
+    height: 1.5em;
 }
 
 :not(li.FE-FileFolder > ul) > li.FE-File {
