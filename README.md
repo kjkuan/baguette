@@ -7,6 +7,41 @@ or, for making reactive web forms with shell scripts. It's developed on top of
 It is still a work in progress, and some knowledge of [htmx] is required to use
 it effectively; however, any feedback, ideas, or contributions are welcomed.
 Please take a look at the issues page if you'd like to participate in its development.
+```bash
+#!/usr/bin/env bash
+#
+set -e
+
+source baguette.sh
+
+declare -A STATES
+
+@main () {
+    main/ id=${FUNCNAME#@} data-scope
+        h2/ ="Welcome to Baguette"
+
+        : ${STATES[username]:=${val_name:-}}
+
+        if [[ ! ${STATES[username]:-} ]]; then
+            textfield name=name label="What's your name?" placeholder="First Last" ws-send=no
+            button label=Submit
+        else
+            markdown "_Hello ${STATES[username]:-World}!_"
+        fi
+
+        local label
+        for label in one two three; do
+            checkbox =${label^}  name=$label value=${label^}
+        done
+
+        local checked=(${val_one:-} ${val_two:-} ${val_three})
+        markdown "You checked: **${checked[*]}**"
+    /main
+}
+
+baguette
+```
+Please see [Guide](docs/Guide.md) for a getting-started guide.
 
 > **NOTE:** While it's possible to build a public-facing "web app" with
 > Baguette, its main use case is for building reactive form-based UIs to
