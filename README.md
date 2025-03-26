@@ -7,6 +7,38 @@ or, for making reactive web forms with shell scripts. It's developed on top of
 It is still a work in progress, and some knowledge of [htmx] is required to use
 it effectively; however, any feedback, ideas, or contributions are welcomed.
 Please take a look at the issues page if you'd like to participate in its development.
+
+> **NOTE:** While it's possible to build a public-facing "web app" with
+> Baguette, its main use case is for building reactive form-based UIs to
+> existing tools / commands that are meant for internal consumptions within a
+> secure private network.
+
+[htmx]: https://htmx.org
+[websocketd]: https://github.com/joewalnes/websocketd
+
+
+## Features
+
+- Websocket makes it easy to write stateful and reactive web applications.
+- Built-in support for OOP and modeling via [Bos](lib/bos.sh).
+- Built-in UI widgets / components (Experimental).
+- Error reporting (when `set -e` is used) with stack traces to help with app development.
+
+
+## Limitations
+
+- A Baguette app is not RESTful; it exposes no HTTP endpoints, so you can't,
+  for example, bookmark the state of your app via an URL, and you can't interact
+  with it via HTTP requests (you can use CGI, but then it's a separate process).
+
+- It's slow and not scalable to high number of users. Though, depends on your use
+  case, it might be fast enough; or, it might be good for prototyping.
+
+
+## Sample Baguette App
+
+Here's what a simple, single-page app in Baguette looks like:
+
 ```bash
 #!/usr/bin/env bash
 #
@@ -41,33 +73,8 @@ declare -A STATES
 
 baguette
 ```
+
 Please see [Guide](docs/Guide.md) for a getting-started guide.
-
-> **NOTE:** While it's possible to build a public-facing "web app" with
-> Baguette, its main use case is for building reactive form-based UIs to
-> existing tools / commands that are meant for internal consumptions within a
-> secure private network.
-
-[htmx]: https://htmx.org
-[websocketd]: https://github.com/joewalnes/websocketd
-
-
-## Features
-
-- Websocket makes it easy to write stateful and reactive web applications.
-- Built-in support for OOP and modeling via [Bos](lib/bos.sh).
-- Built-in UI widgets / components (Experimental).
-- Error reporting (when `set -e` is used) with stack traces to help with app development.
-
-
-## Limitations
-
-- A Baguette app is not RESTful; it exposes no HTTP endpoints, so you can't,
-  for example, bookmark the state of your app via an URL, and you can't interact
-  with it via HTTP requests (you can use CGI, but then it's a separate process).
-
-- It's slow and not scalable to high number of users. Though, depends on your use
-  case, it might be fast enough; or, it might be good for prototyping.
 
 
 ## Dependencies
