@@ -11,7 +11,6 @@
 #
 #  - Allow incremental searching
 #  - Generate backlinks
-#  - Use github's markdown stylesheet
 #
 #  - Generate knowledge graph
 #  - Allow generating htmls for publishing as a static website
@@ -393,7 +392,7 @@ EOF
             fi
         /div
         if [[ $mode == view ]]; then
-            div/ class="FileViewer-contents preview"
+            div/ class="FileViewer-contents preview markdown-body"
                 markdown "$CURRENT_CONTENTS" | post-process-html
             /div
         else # edit mode
@@ -459,7 +458,7 @@ EOF
     |
    sed -e 's|<html><body>||; s|</body></html>||' \
     |
-   while read -r line; do
+   while IFS= read -r line; do
        printf "%s&#10;" "$line"
    done
 }
