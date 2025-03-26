@@ -11,6 +11,8 @@
 #
 #  - Allow incremental searching
 #  - Generate backlinks
+#  - Use github's markdown stylesheet
+#
 #  - Generate knowledge graph
 #  - Allow generating htmls for publishing as a static website
 #    - Generate a ToC
@@ -156,6 +158,9 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
     msg $FE_MODEL path-id "$new_path"; local new_path_id=$RESULT
     fe-navigate-to-path $new_path_id
     @file-viewer $new_path_id  # needed to keep the tree and the view in-sync
+
+
+    # FIXME: need to fix all backlinks
 }
 
 create-untitled () (  # <file|folder>

@@ -220,25 +220,33 @@ event.stopPropagation();
 EOF
 }
 
+-fe-trigger-click () {  # <path-id>
+    local otid=${HX[Trigger]:-}
+    HX[Trigger]=$1   # fake the click trigger
+    file-explorer
+    HX[Trigger]=$otid
+}
+
+
 # Helper to unselect all and select the specified path-id, expanding
 # its parent directory if necessary.
 #
 fe-navigate-to-path () {  # <path-id> <path>
     local model=${1%%-*}
-    if [[ $1 != *d ]]; then
-        local dir; dir=$(dirname "$2")
-        msg $model path-id "$dir"; local path_id=$RESULT
-    else
-        local path_id=$1
-    fi
-    msg $model root-id; local root_id=$RESULT
-    if [[ $path_id != "$root_id" ]]; then
+
+    file-explorer "$model"
+
+    if [[ $2 == */* ]]; then
+        local path_id dir=$(dirname "$2"); dir=./$dir
+        while [[ $dir == */* ]]; do
+            msg $model path-id "$dir/"; path_id=$RESULT
+            msg $model set "$path_id@state=1"
+            dir=${dir%/*}
+        done
         msg $model set "$path_id@state=0"
-        HX[Trigger]=$path_id   # fake the click trigger
-        file-explorer
-    else
-        file-explorer "$model"
+        -fe-trigger-click "$path_id"
     fi
+
     script/ id=script-from-server ="$(cat <<EOF
         setTimeout(function() {
             $FE_JS__UNSELECT_ALL
