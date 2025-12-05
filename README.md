@@ -87,21 +87,20 @@ Please see [Guide](docs/Guide.md) for a getting-started guide.
 
 You can take a look at [the examples](examples) to get an idea on what a
 Baguette app looks like. Currently, a [Dockerfile](Dockerfile) is provided for building
-an image with the dependencies needed to run the examples (replace `podman`
-with `docker` if that's what you use):
+an image with the dependencies needed to run the examples.
 
 ```Bash
 $ cd baguette
-$ podman build -t baguette .
+$ docker build -t localhost/baguette .
 
 $ d=/home/baguette/baguette image=localhost/baguette
-$ opts=(--rm --userns keep-id -v "$PWD:${d:?}" -e WSD_PORT=5000 -p 5000:5000)
+$ opts=(--rm -v "$PWD:${d:?}" -e WSD_PORT=5000 -p 5000:5000)
 
 # Pick one to try: (ctrl-c to exit)
-$ podman run "${opts[@]}" -w "$d/examples/todo-app" $image ./main.sh
-$ podman run "${opts[@]}" -w "$d/examples/markdown-app" $image ./main.sh
-$ podman run "${opts[@]}" -w "$d/examples/contact-app" $image ./main.sh
-$ podman run "${opts[@]}" -w "$d/examples/wiki-app" $image ./main.sh
+$ docker run "${opts[@]}" -w "$d/examples/todo-app" $image ./main.sh
+$ docker run "${opts[@]}" -w "$d/examples/markdown-app" $image ./main.sh
+$ docker run "${opts[@]}" -w "$d/examples/contact-app" $image ./main.sh
+$ docker run "${opts[@]}" -w "$d/examples/wiki-app" $image ./main.sh
 
 # NOTE: The path to /index.html is required for the URL of these apps.
 ```

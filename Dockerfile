@@ -57,6 +57,6 @@ RUN adduser -D -s /bin/bash baguette \
 WORKDIR /home/baguette
 
 USER baguette
-ENV PATH /home/baguette/baguette:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV PATH=/home/baguette/baguette:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 CMD ["/bin/bash"]
