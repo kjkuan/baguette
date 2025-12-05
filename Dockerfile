@@ -46,7 +46,8 @@ RUN apk --no-cache add \
     bash \
     coreutils \
     jq \
-    xmlstarlet
+    xmlstarlet \
+    git
 #
 # NOTE: xmlstarlet is needed by the wiki app; also libxml2 in Alpine 3.21 appears
 # to be broken, which makes xmlstarlet fail to read from STDIN.

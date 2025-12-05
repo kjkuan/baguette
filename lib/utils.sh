@@ -236,6 +236,7 @@ err-trace () {  # [error-message [status]]
 _print_stacktrace () {
     while read -r lineno func file; do
         echo "File $file, line $lineno${func:+", in $func ()"}:"
+        [[ $file == /* ]] || file=$BGT_STARTING_DIR/$file
         echo "$(mapfile -tn1 -s $((lineno - 1)) l < "$file"; echo "  $l")"
     done
 }

@@ -3,6 +3,8 @@
 BGT_HOME=$(cd "$(dirname "$BASH_SOURCE")" && pwd) || return
 export BGT_HOME
 
+BGT_STARTING_DIR=$PWD
+
 # --- Options for websocketd ------------------------------------
 : ${WSD_ADDR:=0.0.0.0}
 : ${WSD_PORT:=8080}

@@ -118,9 +118,12 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
     local model=${val_path_id%%-*}
     msg $model id-path $val_path_id; local path=$RESULT
 
-    val_old_name+=.md
-    val_new_name+=.md
     [[ $val_old_name == "${path##*/}" ]] # sanity check
+
+    if [[ $val_path_id != *d ]]; then
+        val_old_name+=.md
+        val_new_name+=.md
+    fi
 
     if [[ $path == */* ]]; then
         local new_path=${path%/*}/$val_new_name
@@ -362,8 +365,7 @@ EOF
     elif [[ -v val_btn_cancel ]]; then
         CURRENT_CONTENTS=$(cat "$path")
         mode=view
-
-    elif [[ ! -v val_btn_mode ]]; then
+    elif [[ ! -v val_btn_mode && ${val_path_id:-} == *f ]]; then
         CURRENT_CONTENTS=$(cat "$path")
     fi
 
