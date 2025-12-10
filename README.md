@@ -37,8 +37,8 @@ Please take a look at the issues page if you'd like to participate in its develo
 
 ## Sample Baguette App
 
-Here's what a simple, single-page app in Baguette looks like:
-
+Here's what a simple, single-page app (available as [example-app.sh]) in Baguette
+looks like:
 ```bash
 #!/usr/bin/env bash
 #
@@ -76,6 +76,8 @@ baguette
 
 Please see [Guide](docs/Guide.md) for a getting-started guide.
 
+[example-app.sh]: examples/example-app.sh
+
 
 ## Dependencies
 
@@ -85,10 +87,11 @@ Please see [Guide](docs/Guide.md) for a getting-started guide.
 - GNU Coreutils
 - Bash (>= 4.3; preferably >= 5)
 
-You can take a look at [the examples](examples) to get an idea on what a
+Take a look at [the examples](examples) to get an idea on what a
 Baguette app looks like. Currently, a [Dockerfile](Dockerfile) is provided for building
 an image with the dependencies needed to run the examples.
 
+You can build the image and run the examples following these instructions:
 ```Bash
 $ cd baguette
 $ docker build -t localhost/baguette .
@@ -104,6 +107,10 @@ $ docker run "${opts[@]}" -w "$d/examples/wiki-app" $image ./main.sh
 
 # NOTE: The path to /index.html is required for the URL of these apps.
 ```
+
+Alternatively, there's now a [bin/baguette-dev.sh](bin/baguette-dev.sh) that can be used to
+run any Baguette app script or folder in a docker container built from the
+[Dockerfile](Dockerfile).
 
 
 ## Other similar projects:

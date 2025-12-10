@@ -21,7 +21,7 @@ BGT_STARTING_DIR=$PWD
 # If no cgi-bin/, then use the default one in Baguette.
 [[ -d $WSD_CGI_DIR ]] || WSD_CGI_DIR=$BGT_HOME/cgi-bin
 
-export WSD_ADDR WSD_PORT WSD_SCRIPT_DIR WSD_PUBLIC_DIR 
+export WSD_ADDR WSD_PORT WSD_SCRIPT_DIR WSD_PUBLIC_DIR
 
 # Array for additional options that overrides the websocketd launch command
 WSD_OPTS=()

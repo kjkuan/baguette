@@ -2,3 +2,4 @@
 *.strace.*
 *.strace.*
 *.xtrace.*
+mnt/
