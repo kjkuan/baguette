@@ -118,12 +118,13 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
     local model=${val_path_id%%-*}
     msg $model id-path $val_path_id; local path=$RESULT
 
-    [[ $val_old_name == "${path##*/}" ]] # sanity check
-
     if [[ $val_path_id != *d ]]; then
         val_old_name+=.md
         val_new_name+=.md
     fi
+
+    [[ $val_old_name == "${path##*/}" ]] # sanity check
+
 
     if [[ $path == */* ]]; then
         local new_path=${path%/*}/$val_new_name
@@ -156,6 +157,8 @@ git-tracked () { git ls-files --error-unmatch -- "${1:?}" >/dev/null 2>&1; }
 
     # Remove the old path-id
     msg $model remove-id "$val_path_id"
+
+    [[ $val_path_id == *d ]] && new_path+=/
 
     msg $FE_MODEL path-id "$new_path"; local new_path_id=$RESULT
     fe-navigate-to-path $new_path_id
@@ -365,8 +368,10 @@ EOF
     elif [[ -v val_btn_cancel ]]; then
         CURRENT_CONTENTS=$(cat "$path")
         mode=view
-    elif [[ ! -v val_btn_mode && ${val_path_id:-} == *f ]]; then
+
+    elif [[ ! -v val_btn_mode && ${path_id:-} == *f ]]; then
         CURRENT_CONTENTS=$(cat "$path")
+        mode=view
     fi
 
     div/ id=${FUNCNAME#@} data-scope

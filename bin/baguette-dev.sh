@@ -13,7 +13,9 @@ set -e
 
 script_dir=$(cd "$(dirname "$0")" && pwd)
 
-baguette_app=${1:-.}; [[ ${1:-} ]] && shift
+noargs=
+baguette_app=${1:-.}
+[[ ${1:-} ]] && shift || noargs=x
 
 image=localhost/baguette
 container_home=/home/baguette
@@ -54,10 +56,19 @@ cd "$script_dir/.."
 
 docker build -t $image .
 
+docker_opts=(
+    --rm
+    -e WSD_PORT=5000 -p 5000:5000
+    -v "$PWD:$container_home/baguette"
+    -v "$(get-app-bind-mount)"
+    -w "$app_mount_root/$(get-app-folder-name)"
+)
+
+cmd=./${app_script##*/}
+if [[ $noargs ]]; then
+    docker_opts+=("-it")
+    cmd=/bin/bash
+fi
+
 mkdir -p mnt
-exec docker run --rm \
-    -e WSD_PORT=5000 -p 5000:5000 \
-    -v "$PWD:$container_home/baguette" \
-    -v "$(get-app-bind-mount)" \
-    -w "$app_mount_root/$(get-app-folder-name)" \
-    $image "./${app_script##*/}" "$@"
+exec docker run "${docker_opts[@]}" $image "$cmd" "$@"
