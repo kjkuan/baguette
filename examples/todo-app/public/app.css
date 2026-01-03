@@ -86,10 +86,11 @@ main {
     cursor: move;
     cursor: -webkit-grabbing;
     visibility: hidden;
-    display: inline-block;
+/*    display: inline-block; */
     float: left;
-    margin-right: 5px;
-    letter-spacing: -0.7em;
+/*    margin-right: 5px; */
+/*    letter-spacing: -0.7em; */
+    width: 1em;
 }
 .TodoItem:hover .TodoItem-dragHandle:not(.appending) {
     visibility: visible;
