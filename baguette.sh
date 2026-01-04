@@ -30,9 +30,13 @@ WSD_OPTS=()
 
 # For logging execution trace (set -x) and stderr; empty means no tracing.
 BGT_TRACE_FILE=; # E.g., BGT_TRACE_FILE=bgt.xtrace
+if [[ $BGT_TRACE_FILE && $BGT_TRACE_FILE != /* ]]; then
+    BGT_TRACE_FILE=$PWD/$BGT_TRACE_FILE
+fi
 
 # For logging stderr and the last stack trace
 : ${BGT_STACK_TRACE_FILE="${0##*/}.strace"}
+[[ $BGT_STACK_TRACE_FILE == /* ]] || BGT_STACK_TRACE_FILE=$PWD/$BGT_STACK_TRACE_FILE
 
 # Set this to non-empty if you wish to flash any outputs to STDERR
 # Default is yes if errexit (set -e) is enabled.
@@ -201,7 +205,7 @@ baguette () {
         else
             exec 2>>"$BGT_STACK_TRACE_FILE" || err-return
         fi
-        BGT_EXIT_CMDS+=('[[ -s $BGT_STACK_TRACE_FILE ]] || rm "$BGT_STACK_TRACE_FILE"')
+        BGT_EXIT_CMDS+=('[[ -s $BGT_STACK_TRACE_FILE ]] || rm -f "$BGT_STACK_TRACE_FILE"')
         _baguette "$@"
     else
         # We are sourced by a Baguette app / script

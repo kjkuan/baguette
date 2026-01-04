@@ -58,6 +58,10 @@ docker build -t $image .
 
 docker_opts=(
     --rm
+    --init -it
+    # NOTE: This (-it) is needed so that CTRL-C sends SIGINT to the Bash
+    # baguette process, which kills it while allowing proper clean ups.
+    #
     -e WSD_PORT=5000 -p 5000:5000
     -v "$PWD:$container_home/baguette"
     -v "$(get-app-bind-mount)"
@@ -66,7 +70,6 @@ docker_opts=(
 
 cmd=./${app_script##*/}
 if [[ $noargs ]]; then
-    docker_opts+=("-it")
     cmd=/bin/bash
 fi
 
