@@ -66,6 +66,18 @@ htmx.onLoad(function(elt) {
     }
 });
 
+/** If editing viewer contents, send the contents along with any request
+ *  so the data can be saved before switching away from the edit view.
+ */
+htmx.on("htmx:wsConfigSend", function (evt) {
+    const viewer = document.querySelector("#file-viewer .FileViewer-contents");
+    if (!viewer) return;
+    if (viewer.value && !evt.detail.parameters["contents"]) {
+        evt.detail.parameters["contents"] = viewer.value;
+    }
+    //console.log(evt.detail.parameters);
+    //FIXME: Only send back contents if actually changed.
+});
 
 function delete_selected_files() {
     let selected = document.querySelectorAll(".selected");

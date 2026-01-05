@@ -298,6 +298,19 @@ EOF
     local mode=${2:-${val_btn_mode:-}}; [[ $mode ]] || mode=view
     local model=${path_id%%-*}
 
+    if [[ -v val_contents || -v val_btn_save ]]; then
+        (
+            cd "$WIKI_HOME"
+            msg "$model" id-path "$path_id"; path=$RESULT; path=${path#$WIKI_HOME/}
+            printf -- %s "$val_contents" > "$path"
+            git add -- "$path"
+            if [[ $(git status --porcelain -- "$path") != "" ]]; then
+                git commit -m "Add or update $path"
+            fi
+        )
+        [[ $val_btn_save == edit ]] && mode=view
+    fi
+
     local tid; get-hx-tid
     if [[ $tid == back-btn ]]; then
 
@@ -357,15 +370,7 @@ EOF
         CURRENT_CONTENTS=$val_contents
     fi
 
-    if [[ -v val_btn_save ]]; then
-        printf -- %s "$CURRENT_CONTENTS" > "$path"
-        (cd "$WIKI_HOME"
-         git add -- "${path#$WIKI_HOME/}"
-         git commit -m "Add or update ${path#$WIKI_HOME/}"
-        )
-        [[ $val_btn_save == edit ]] && mode=view
-
-    elif [[ -v val_btn_cancel ]]; then
+    if [[ -v val_btn_cancel ]]; then
         CURRENT_CONTENTS=$(cat "$path")
         mode=view
 
