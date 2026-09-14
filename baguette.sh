@@ -59,6 +59,10 @@ BGT_EXIT_CMDS=(); trap '
 
 [[ $- == *e* ]] || { no_errexit=x; set -e; }
 
+# Load the error handling; this has to come first, before anything using the
+# 'err-return' / 'err-exit' aliases gets parsed.
+source "$BGT_HOME/lib/errtrace.sh"
+
 # Load helper functions and aliases
 source "$BGT_HOME/lib/utils.sh"
 

@@ -187,14 +187,18 @@ Object/set () { Object/init "$@"; }
 
 # Print the object states.
 Object/print () {
-    local key class_name=${self#_bos_}; class_name=${class_name%__*}
+    local key # NOTE: class_name=${self#_bos_}; class_name=${class_name%__*}
     echo "$self"
     for key in "${!self[@]}"; do
         [[ $key != 0 ]] || continue
         printf "    %s=%q\n" "$key" "${self[$key]}"
     done \
          |
-        sort -t= -k1,1
+        sort -t = -k1,1
+        # NOTE: '=' must be passed as a separate argument; uutils coreutils
+        #       parses the '=' of '-t=' as the option / value separator, and
+        #       ends up with an empty separator. ('-t==' fixes that but then
+        #       breaks GNU coreutils, which sees a 2-character separator.)
 }
 
 # Print the object attributes as JSON.

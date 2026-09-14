@@ -113,6 +113,51 @@ run any Baguette app script or folder in a docker container built from the
 [Dockerfile](Dockerfile).
 
 
+## Using Bos and the error handling outside Baguette
+
+[lib/bos.sh](lib/bos.sh) (the object system) and [lib/errtrace.sh](lib/errtrace.sh)
+(stack-trace-preserving error handling) are self-contained. Neither needs the rest
+of Baguette, so any Bash script can source them. `bos.sh` also works on its own,
+falling back to a minimal `err-trace` when `errtrace.sh` isn't loaded.
+
+Fetch them pinned to a commit, so an upstream change can't surprise you:
+```bash
+REPO=kjkuan/baguette
+REF=<commit-sha>
+
+mkdir -p vendor
+for f in errtrace.sh bos.sh; do
+    [[ -e vendor/$f ]] && continue
+    curl -fsSL -o vendor/$f "https://raw.githubusercontent.com/$REPO/$REF/lib/$f" || {
+        echo "Failed to fetch $f" >&2
+        exit 1
+    }
+done
+
+PATH=$PWD/vendor:$PATH
+```
+
+Then source them, `errtrace.sh` first:
+```bash
+#!/usr/bin/env bash
+#
+set -eEo pipefail
+
+source errtrace.sh       # must come before anything that uses err-return
+source bos.sh
+
+class Server
+Server/init () {
+    msg $self ../init "$@"
+    [[ ${self[port]:-} =~ ^[0-9]+$ ]] || err-return
+}
+Server/url () { RESULT="http://${self[host]}:${self[port]}"; }
+
+Server s1 host=localhost port=8080
+msg $s1 url; echo "$RESULT"    # -> http://localhost:8080
+```
+
+
 ## Other similar projects:
 
 - [Streamlit](https://github.com/streamlit/streamlit) (original inspiration)
