@@ -143,7 +143,9 @@ Then source them, `errtrace.sh` first:
 #
 set -eEo pipefail
 
-source errtrace.sh       # must come before anything that uses err-return
+source errtrace.sh  # must come before anything that uses err-return
+trap err-trace ERR  # print stack trace on non-zero command returns; goes well with set -e
+
 source bos.sh
 
 class Server
