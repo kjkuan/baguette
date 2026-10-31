@@ -34,7 +34,7 @@ alias err-exit='{ err-trace; exit; }'
 # Define an error logging function, if one doesn't already exist, to be used
 # for logging an optional error message through err-trace.
 #
-if ! declare -F error 2>/dev/null; then
+if ! declare -F error >/dev/null 2>&1; then
     error () { printf "Error: %s\n" "$1" >&2; }
 fi
 
