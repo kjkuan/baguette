@@ -31,6 +31,13 @@ shopt -s expand_aliases
 alias err-return='{ err-trace; return; }'
 alias err-exit='{ err-trace; exit; }'
 
+# Define an error logging function, if one doesn't already exist, to be used
+# for logging an optional error message through err-trace.
+#
+if ! declare -F error 2>/dev/null; then
+    error () { printf "Error: %s\n" "$1" >&2; }
+fi
+
 # Show an optional error message and return the last / or the specified
 # exit status while printing the stack trace to STDERR.
 #
@@ -44,7 +51,7 @@ alias err-exit='{ err-trace; exit; }'
 #
 err-trace () {  # [error-message [status]]
     local rc=${2:-$?}; local opts=$-; set +x
-    [[ ! ${1:-} ]] || printf "Error: %s\n" "$1"
+    [[ ! ${1:-} ]] || error "$1"
 
     local new_trace=$(while caller $((i++)); do :; done | tac)
     if [[ ${BGT_LAST_TRACE:-} != "$new_trace"* ]]; then
