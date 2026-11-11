@@ -67,6 +67,9 @@ file-upload () {
              alt="Uploading ..." width=16 height=16
 
         if [[ ${uploaded_filename:-} ]]; then
+            # The size comes from the client; validate it before using it in
+            # an arithmetic context to prevent command injections.
+            [[ ${uploaded_filesize:-} =~ ^[0-9]{1,15}$ ]] || err-return
             small/
                 text "Uploaded: $uploaded_filename (approx. $(( (uploaded_filesize+1023)/1024 ))Kb)"
             /small

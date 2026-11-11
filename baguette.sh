@@ -125,6 +125,11 @@ _baguette () {
                 )) as $headers
                     |
                 del(.HEADERS) | to_entries | map(
+                    # Field names end up as variable names in the eval-ed
+                    # code, so only allow characters that are safe there.
+                    if (.key|test("^[A-Za-z0-9_-]+$")) then . else
+                        error("Invalid field name: \(.key|tojson)")
+                    end |
                     "val_\(.key|gsub("-"; "_"))=\(
                         if (.value|type) == "array" then
                           "(" + ([.value[] | toval | @sh] | join(" ")) + ")"
@@ -220,6 +225,10 @@ baguette () {
             --staticdir "$WSD_PUBLIC_DIR"
             --cgidir "$WSD_CGI_DIR"
             --passenv PATH,BGT_HOME,WSD_ADDR,WSD_PORT,WSD_SCRIPT_DIR,WSD_PUBLIC_DIR
+            # Reject websocket connections initiated by pages from other
+            # origins (cross-site websocket hijacking). To allow other origins,
+            # use, e.g., WSD_OPTS=(--sameorigin=false --origin=host1:port1,host2:port2)
+            --sameorigin=true
             "${WSD_OPTS[@]}"
             "$WSD_SCRIPT_DIR/${0##*/}" "$@"
         )
