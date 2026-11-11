@@ -21,14 +21,18 @@ escape-html () {  # <varname>
 text () { local text="$*"; escape-html text; print "$text"; }
 is-int () { [[ ${1:-} ]] && printf %d "$1" >/dev/null 2>&1; }
 
-is-safe () { [[ ${1:-} =~ [_a-zA-Z]*[_a-zA-Z0-9]+ ]]; }
+is-safe () { [[ ${1:-} =~ ^[_a-zA-Z0-9][-_a-zA-Z0-9]*$ ]]; }
 # NOTE: No array element reference allowed, to guard against command injections.
+# Dashes are allowed (e.g., in element ids), but not as the first character.
 
 
 # Generate a random hexadecimal id with low probability of collisions.
 get-guid () {
-    od -N 16 -t x -A n /dev/urandom | tr -d ' '
-    [[ $PIPESTATUS ]] || err-return
+    local guid
+    guid=$(od -N 16 -t x -A n /dev/urandom) || err-return
+    guid=${guid//[[:space:]]/}
+    [[ $guid =~ ^[0-9a-f]{32}$ ]] || err-return
+    print "$guid"
 }
 
 
@@ -216,7 +220,12 @@ get-hx-tname () {
 generate-download-script () {  # <dir-for-the-script> <file-for-download> [as-name]
     local dir=${1:-} file=${2:-} download_name=${3:-}
     [[ -d $dir && -f $file ]] || err-return
-    file=$(realpath -e "$file")
+    file=$(realpath -e "$file") || err-return
+
+    # The name goes into a quoted HTTP header parameter; replace characters that
+    # could end the quoted string or the header line.
+    download_name=${download_name:-${file##*/}}
+    download_name=${download_name//[[:cntrl:]\"\\]/_}
 
     local id; id=$(get-guid) || err-return
     local code; code="$(cat <<EOF
@@ -226,10 +235,12 @@ CRLF=\$'\r\n'
 nl () { printf %s "\$CRLF"; }
 print () { printf %s "\$@"; }
 
+filename=$(printf %q "$download_name")
+
 print "Content-Type: application/octet-stream"; nl
-print "Content-Disposition: attachment; filename=${download_name:-${file##*/}}"; nl
+print "Content-Disposition: attachment; filename=\"\$filename\""; nl
 nl
-cat $(printf %q "$file")
+cat -- $(printf %q "$file")
 EOF
     )" || err-return
 

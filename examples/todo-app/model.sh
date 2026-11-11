@@ -191,7 +191,7 @@ class TodoListManager
 TodoListManager/new-list () {  # <todo-list-name>
     [[ ${1:-} ]] || err-return
     local list; TodoList list "$1"
-    local guid=$(get-guid)
+    local guid; guid=$(get-guid) || err-return
     self[$list]=$guid
     RESULT=$list
 }
